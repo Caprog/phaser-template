@@ -31,3 +31,20 @@ export const PhaserUtils = {
         }
     }
 }
+
+
+export const useSubscriber = () => {
+    const subscriptions = {} 
+    const subscribe = (event, callback) => subscriptions[event] ? subscriptions[event].push(callback) : subscriptions[event] = [ callback ]
+    const notify = (event, data) => subscriptions[event]?.forEach(c => c(data))
+    return {
+        subscribe(e, c){
+            subscribe(e, c)
+            return this
+        },
+        notify(e, d){
+            notify(e, d)
+            return this
+        }
+    }
+}

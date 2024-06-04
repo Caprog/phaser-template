@@ -6,6 +6,14 @@ export const GAMES = {
         useJumpBall({
             config, 
             data : {
+                level: 1,
+                levels: [
+                    {
+                        objects: [
+                            { type: 'red-block', x: 0, y: 150, width: 200, height: 50, action: 'slide-right' }
+                        ]
+                    }
+                ],
                 player: {
                     x: 0,
                     y: 0,

@@ -1,15 +1,20 @@
-import { PhaserUtils, PlanckUtils, getMiddlePosition } from '../utils/utils'
+import { PhaserUtils, PlanckUtils, getMiddlePosition, useSubscriber } from '../utils/utils'
 import { useBodyFactory } from '../factory/factory'
 import * as planck from 'planck-js'
 
-export function useJumpBall({ config, data: _data }) {
+export function useJumpBall({ config, data: _data,  }) {
     let event = null
-    const subscriptions = {} 
-    const notify = (event, data) => subscriptions[event]?.forEach(c => c(data))
+    let level = 1
+    const subscriber = useSubscriber()
+    const { subscribe, notify } = subscriber
+    
+    subscribe('change_level', () => level++)
+
+
     return {
         init: () => {
             return {
-                subscribe: (event, callback) => subscriptions[event] ? subscriptions[event].push(callback) : subscriptions[event] = [ callback ],
+                subscribe: (e, d) => subscribe(e, d),
                 create: (ctx) => {
 
                     const { startGameLoop }      = PhaserUtils
@@ -50,7 +55,10 @@ export function useJumpBall({ config, data: _data }) {
                         {
                             a   : player,
                             b   : ceiling,
-                            then: () => notify('restart')
+                            then: () => {
+                                notify('change_level')
+                                notify('restart')
+                            }
                         }
                     ]
         
