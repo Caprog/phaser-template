@@ -8,7 +8,7 @@ const PlanckWrapper = {
 const pxToMts = (x) => x / 30
 
 export const useBodyFactory = ({ world, ctx }) => ({
-    createBox: ({ x, y, width, height, bgcolor, type, radius }) => {
+    createSquare: ({ x, y, width, height, bgcolor, type, radius }) => {
         const { createRoundedRectangle } = useShapeFactory({ ctx })
         const body = world.createBody({
             type,
