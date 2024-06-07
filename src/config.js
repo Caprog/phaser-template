@@ -1,9 +1,8 @@
-import { useGame } from "./scenes/Game";
 import { Boot } from "./scenes/Boot";
 import { Preloader } from "./scenes/Preloader";
 import { GameOver } from "./scenes/GameOver";
-import { useJumpBall } from "./logic/jump-ball";
-import { GAMES } from "./game-data";
+import { usePong } from "./game/pong/pong";
+import { useGenericScene } from "./scenes/GenericScene";
 
 export const config = {
     type       : Phaser.AUTO,
@@ -11,16 +10,25 @@ export const config = {
     height     : 768,
     parent     : 'game-container',
     transparent: true,
-    gravity: 30,
+    gravity    : 30,
     scale: {
         mode      : Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
     }
 }
 
 config.scene = [
     Boot,
     Preloader,
-    useGame(GAMES["jump-ball"]?.(config)),
+    useGenericScene({
+        sceneName: 'Game',
+        game: usePong({ config })
+    }),
     GameOver
 ]

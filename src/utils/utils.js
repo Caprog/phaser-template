@@ -50,7 +50,7 @@ export const useSubscriber = () => {
 }
 
 export const halfSize = (size) => size / 2
-
+export const hasValue = val => val !== null && val !== undefined
 export const position = {
     center: (containerSize, itemSize) => containerSize / 2 - itemSize / 2
 }

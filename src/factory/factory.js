@@ -1,39 +1,30 @@
-import * as planck from 'planck-js'
+import { hasValue } from '../utils/utils'
 
-const PlanckWrapper = {
-    Vec2: (x, y) => planck.Vec2(pxToMts(x), pxToMts(y)),
-    Box: (w, h) => planck.Box(pxToMts(w) / 2, pxToMts(h) / 2)
+export const useBodyFactory = ({ ctx, physics }) => ({
+    createSquare: createSquare({ ctx, physics })
+})
+
+const createSquare = ({ ctx, physics }) => node => {
+    const { createRoundedRectangle } = useShapeFactory({ ctx })
+    const { type } = node
+    const graphics = createRoundedRectangle(node)
+    physics.add.existing(graphics)
+
+    if (type === 'static') {
+        graphics.body.setImmovable(true)
+    } else 
+        setDynamicPhysics(graphics, node)
+
+    graphics.setData(node)
+
+    return graphics
 }
 
-const pxToMts = (x) => x / 30
-
-export const useBodyFactory = ({ world, ctx }) => ({
-    createSquare: ({ x, y, width, height, bgcolor, type, radius }) => {
-        const { createRoundedRectangle } = useShapeFactory({ ctx })
-        const body = world.createBody({
-            type,
-            position: PlanckWrapper.Vec2(x + width / 2, y + height / 2) // Ajuste de posición
-        })
-
-        const shape = PlanckWrapper.Box(width, height)
-        body.createFixture(shape, {
-            restitution: 0.2,
-            friction: 0.5,
-            density: 2
-        })
-
-        const graphics = createRoundedRectangle({ x, y, width, height, bgcolor, radius })
-
-        body.setUserData({
-            graphics: graphics,
-            bgcolor,
-            width,
-            height,
-        })
-
-        return body
-    }
-})
+const setDynamicPhysics = ({ body }, { gravityScale }) => {
+    body.setCollideWorldBounds(true)
+    body.setBounce(0.2)
+    if (hasValue(gravityScale)) body.setGravityY(gravityScale)
+}
 
 const useShapeFactory = ({ ctx }) => ({
     createRoundedRectangle: ({ x, y, bgcolor, width, height, radius = 0 }) => {
