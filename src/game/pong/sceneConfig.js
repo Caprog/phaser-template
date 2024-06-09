@@ -56,7 +56,22 @@ const objects = [
         value: 0,
         font : { fontSize: '52px', fontFamily: 'sans-serif', fill: colors.primary },
         x    : centerWidth,
-        y    : centerHeight
+        y    : centerHeight - (margin * 2)
+    },
+    { 
+        type : 'text',
+        text : 'Best Score',
+        font : { fontSize: '24px', fontFamily: 'sans-serif', fill: colors.primary },
+        x    : centerWidth,
+        y    : centerHeight - (margin * 1.35)
+    },
+    { 
+        type : 'text',
+        name : 'bestScore',
+        text: '0',
+        font : { fontSize: '24px', fontFamily: 'sans-serif', fill: colors.primary },
+        x    : centerWidth,
+        y    : centerHeight - (margin * 1)
     },
     { 
         type  : 'block',

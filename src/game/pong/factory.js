@@ -28,6 +28,16 @@ function buildText(scene, object) {
             fill: hexToCSS(object.font?.fill ?? 0xFFFFFF),
         }
     )
+    text.$update = {
+        set value(newVal){
+            this.$_value = newVal
+            text.setText(this.$_value)
+        },
+        get value(){
+            return this.$_value
+        }
+    }
+    text.$update.value = object.text ?? ''
     text.setOrigin(0.5, 0.5)
     return text
 }
@@ -67,5 +77,6 @@ export const factory = {
     paddle : aggData(buildPaddle),
     ball   : aggData(buildBall),
     counter: aggData(buildCounter),
-    block  : aggData(buildBlock)
+    block  : aggData(buildBlock),
+    text   : aggData(buildText),
 }

@@ -82,7 +82,8 @@ function setupPauseControl({scene, controls }) {
     })
 }
 
-export const getFirst = arr => arr?.length > 0 ? arr[0] : undefined
+export const getFirst   = arr => arr?.length > 0 ? arr[0] : undefined
+export const findByName = (arr, name) => arr?.find(e => e?.$item?.name === name)
 
 export const create = ({ 
         state, 
@@ -90,14 +91,17 @@ export const create = ({
         data: { objects, controls }, 
         scene,
         factory = {},
+        useEventManager = () => ({ notify() {}}),
         initCollisions = () => {}
     }) => {
         console.log('on create')
         const { physics } = scene
+
         createAndInitSceneGameObjects({ scene, state, objects, factory })
-        initCollisions({ physics, gameObjects: state.gameObjects, config })
-        initControls({ scene, state, controls })
-        initPointer({ scene, state })
+        const eventManager = useEventManager({ scene, state, objects, factory })
+        initCollisions({ physics, gameObjects: state.gameObjects, config, eventManager })
+        initControls({ scene, state, controls, eventManager })
+        initPointer({ scene, state, eventManager })
 
     }
 

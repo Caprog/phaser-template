@@ -1,20 +1,19 @@
 
 import { SCENE_CONFIG } from "./sceneConfig"
 import { factory } from "./factory"
-import { listerControls, create, getFirst } from "./utils"
+import { listerControls, create, getFirst, findByName } from "./utils"
 
-const initCollisions = ({ physics: { add }, gameObjects, config }) => {
+const initCollisions = ({ physics: { add }, gameObjects, config, eventManager: { notify } }) => {
     const ball    = getFirst(gameObjects?.ball)
-    const score   = getFirst(gameObjects?.counter)
     
     const paddles = gameObjects?.paddle ?? []
     paddles.forEach(paddle => add.collider(ball, paddle, () => {
-        score.$update.value++
+        notify('paddle_collision_ball', { paddle, ball })
     }))
 
     const goals = gameObjects?.block ?? []
     goals.forEach(goal => add.collider(ball, goal, () => {
-        score.$update.value = 0
+        notify('ball_collision_goal', { goal, ball })
     }))
 }
 
@@ -45,7 +44,33 @@ function update({ scene : { game }, state: { gameObjects, controls, pointer }, c
     }, pointer })
 }
 
+
+function useEventManager({  scene, data, state: { gameObjects } } ){
+
+    return {
+        notify(event, data){
+            const events = {
+                paddle_collision_ball: _ => {
+                    const score   = getFirst(gameObjects?.counter)
+                    score.$update.value++
+                },
+
+                ball_collision_goal: _ => {
+                    const score    = getFirst(gameObjects?.counter)
+                    const scoreVal = score.$update.value
+                    const bestScore   = findByName(gameObjects?.text, 'bestScore')
+                    const normalizeBestScore = bestScore.$update.value === '' ? '0' : bestScore.$update.value
+                    if(scoreVal > parseInt(normalizeBestScore)) bestScore.$update.value = scoreVal
+                    score.$update.value = 0
+                }
+            }
+
+            events[event]?.(data)
+        }
+    }
+}
+
 export const usePong = ({ state = {}, config }) => ({
-    create: scene => create({ state, config, data: SCENE_CONFIG, scene, initCollisions, factory }),
+    create: scene => create({ state, config, data: SCENE_CONFIG, scene, initCollisions, useEventManager, factory }),
     update: scene => update({ state, config, data: SCENE_CONFIG, scene })
 })
