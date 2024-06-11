@@ -1,17 +1,25 @@
 import { Scene } from "phaser";
 
-export function useGenericScene({ sceneName, game }) {
+export const useGenericScene = ({ sceneName, game }) => {
     return class Game extends Scene {
         constructor() {
             super(sceneName);
         }
+        
+        init() {
+            game?.init?.(this)
+        }
+
+        preload() {
+            game?.preload?.(this)
+        }
 
         create() {
-            game.create(this)
+            game?.create?.(this)
         }
 
         update() {
-            game.update(this)
+            game?.update?.(this)
         }
     }
 }
