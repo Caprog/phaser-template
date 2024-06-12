@@ -1,4 +1,4 @@
-export const useAnimation = ({ state = {}, config }) => ({
+export const useSpriteAnimation = ({ state = {}, config }) => ({
     create: scene => {
         
         const { add , anims, input, scene: sceneManager }  = scene
@@ -97,8 +97,7 @@ export const useAnimation = ({ state = {}, config }) => ({
         if(controls.left.isDown  && isNotCurrentAnim(player, 'move-left'))  player.anims.play('move-left')
         if(controls.right.isDown && isNotCurrentAnim(player, 'move-right')) player.anims.play('move-right')
         
-        if(
-            !controls.right.isDown && 
+        if(!controls.right.isDown && 
                 !controls.left.isDown && 
                     !controls.up.isDown &&
                         !controls.down.isDown &&

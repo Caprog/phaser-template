@@ -1,12 +1,13 @@
 import { Boot } from "./scenes/Boot";
 import { GameOver } from "./scenes/GameOver";
 import { useGenericScene } from "./scenes/GenericScene";
-import { useAnimation } from "./game/animation";
 import { useText } from "./game/text";
 import { useShapes } from "./game/shapes";
 import { usePreloader } from "./game/preloader";
 import { useMove } from "./game/move";
 import { useInput } from "./game/input";
+import { useSpriteAnimation } from "./game/sprite-animation";
+import { usePhysicsCollisions } from "./game/physics-collisions";
 
 export const config = {
     type       : Phaser.AUTO,
@@ -49,12 +50,16 @@ config.scene = [
         game: useShapes({ config })
     }),
     useGenericScene({
-        sceneName: 'Animation',
-        game: useAnimation({ config })
+        sceneName: 'SpriteAnimation',
+        game: useSpriteAnimation({ config })
     }),
     useGenericScene({
         sceneName: 'Move',
         game: useMove({ config })
+    }),
+    useGenericScene({
+        sceneName: 'PhysicsCollisions',
+        game: usePhysicsCollisions({ config })
     }),
     GameOver
 ]

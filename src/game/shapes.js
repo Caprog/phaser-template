@@ -175,6 +175,6 @@ export const useShapes = ({ state = {}, config }) => ({
             fillAlpha: 1
         })
 
-        input.on('pointerdown', _ => sceneManager.start('Animation'), scene);
+        input.on('pointerdown', _ => sceneManager.start('SpriteAnimation'), scene);
     },
 })

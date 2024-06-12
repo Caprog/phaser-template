@@ -46,6 +46,7 @@ export const useInput = ({ state = {}, config }) => ({
         input.on('pointermove', pointer => {
             mouseText.setText(`X: ${pointer.x}, Y: ${pointer.y}`)
         })
+        
         input.on('pointerdown', pointer => {
             if (pointer.leftButtonDown())  clickText.setText('Left Click')
             if (pointer.rightButtonDown()) clickText.setText('Right Click')

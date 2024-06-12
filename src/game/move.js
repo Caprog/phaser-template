@@ -4,7 +4,9 @@ export const useMove = ({ state = {}, config }) => ({
         const { 
             add, 
             physics, // MEMO: 
-            input : { keyboard }
+            input,
+            input : { keyboard },
+            scene: sceneManager
         }  = scene
 
         const [
@@ -17,7 +19,7 @@ export const useMove = ({ state = {}, config }) => ({
             100
         ]
 
-        add.text(centerX, margin, 'Move Sprite', { font: '32px Arial', fill: '#000000' })
+        add.text(centerX, margin, 'Move', { font: '32px Arial', fill: '#000000' })
             .setOrigin(0.5, 0.5) // center the text horizontally and vertically
 
         state.player = {
@@ -36,6 +38,8 @@ export const useMove = ({ state = {}, config }) => ({
             up   : keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
             down : keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
         }
+
+        input.on('pointerdown', _ => sceneManager.start('PhysicsCollisions'), scene);
     },
     
     update: scene => {
